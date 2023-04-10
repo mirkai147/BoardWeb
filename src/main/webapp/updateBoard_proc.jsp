@@ -16,7 +16,7 @@
 	vo.setSeq(Integer.parseInt(seq));
 	
 	BoardDAO boardDAO = new BoardDAO();
-	boardDAO.insertBoard(vo);
+	boardDAO.updateBoard(vo);
 	
 	//3. 화면 네비게이션
 	response.sendRedirect("getBoardList.jsp");	

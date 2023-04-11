@@ -49,7 +49,7 @@ public class BoardController {
 
 		BoardVO board = boardDAO.getBoard(vo);
 		mav.addObject("board", board);	// Model 정보 저장
-		mav.setViewName("getBoard");	// View 정보 저장
+		mav.setViewName("getBoard.jsp");	// View 정보 저장
 		return mav;
 		
 	}
@@ -61,7 +61,7 @@ public class BoardController {
 
 		List<BoardVO> boardList = boardDAO.getBoardList(vo);
 		mav.addObject("boardList",boardList);	// Model 정보 저장
-		mav.setViewName("getBoardList");	// View 정보 저장
+		mav.setViewName("getBoardList.jsp");	// View 정보 저장
 		return mav;
 	}
 }

@@ -8,24 +8,25 @@ import org.springframework.stereotype.Service;
 
 import com.springbook.biz.user.UserVO;
 
+
 @Service
 @Aspect
 public class AfterReturningAdvice {
-//	@Pointcut("execution(* com.springbook.biz..*Impl.get*(..))")
-//	public void getPointcut() {}
+	@Pointcut("execution(* com.springbook.biz..*Impl.*(..))")
+	public void allPointcut() {
+	}
 	
-	@AfterReturning(pointcut = "PointcutCommon.getPointcut()", returning = "returnObj")
+	@AfterReturning(pointcut="allPointcut()", returning="returnObj")  //바인드 변수(returnObj) 지정
 	public void afterLog(JoinPoint jp, Object returnObj) {
-//		System.out.println("[사후 처리] 비즈니스 로직 수행 후 동작");
 		String method = jp.getSignature().getName();
-		
-		if(returnObj instanceof UserVO) {
+		if (returnObj instanceof UserVO) {
 			UserVO user = (UserVO) returnObj;
-			if(user.getRole().equals("Admin")) {
-				System.out.println(user.getName() + "로그인(Admin)");
+			if (user.getRole().equals("Admin")) {
+				System.out.println(user.getName() + " 로그인(Admin)");
 			}
 		}
 		
-		System.out.println("[사후 처리] " + method + "() 메서드 리턴값 : " + returnObj.toString());
+//		System.out.println("[사후 처리] " + method + "() 메소드 리턴값 : " + returnObj.toString());
+		
 	}
 }

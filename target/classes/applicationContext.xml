@@ -1,19 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- <bean> 저장소에 해당하는 XML 설정 파일을 참조하여 <bean>의 생명 주기를 관리하고 여러가지 서비스를 제공, 중요 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
-            
-            <context:component-scan base-package="com.springbook.biz" >
-            </context:component-scan>
-             
-            <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+        
+	        <!-- <import> 태그 : 스프링 기반의 애플리케이션은 단순한 <bean> 등록 외에도 트랜잭션 관리, 예외 처리, 다국어 
+			처리 등 복잡하고 다양한 설정이 필요 이런 모든 설정응ㄹ 하나의 파일로 모두 처리할 수도 있지만 그렇게 하면 스프링 설정 파일이 너무 
+			길어지고 관리도 어려움 결국 기능별 여러 XML 파일로 나누어 설정하는 것이 더 효율적인데, 이렇게 분리하여 작성한 설정파일들을 하나로 
+			통합할 때 <import> 엘리먼트 사용 <import> 태그를 이용하여 여러 스프링 설정 파일을 포함함으로써 한 파일에 작성하는 
+			것과 같은 효과를 낼수 있다. 예를 틀면 <import resource="context-datasource.xml> <import 
+			resource="context-transaction.xml> -->
+			
+			<!-- id는 생략 가능, name도 있으나 id 사용을 선호, 클래스는 정확한 패키지 경로와 클래스 이름을 지정, 자동완성 기능 
+			활용 -->    
+			
+			<!-- init-method 속성 -->
+			<!-- 스프링 컨테이너는 <bean> 등록된 클래스 객체를 생성한 후에 init-method 속성으로 지정된 메서드를 호출함, 
+			이 메서드에서 멤버변수에 대한 초기화 작업을 처리함 -->
+			<!-- The name of the custom initialization method to invoke after setting 
+			bean properties. The method must have no arguments, but may throw any exception. 
+			This is an alternative to implementing Spring's InitializingBean interface 
+			or marking a method with the PostConstruct annotation. -->
+	
+			<!-- destroy-method 속성 -->
+			<!-- 스프링 컨테이너가 객체를 삭제하기 직전에 호출될 임의의 메서드를 지정 -->
+			<!-- The name of the custom destroy method to invoke on bean factory shutdown. 
+			The method must have no arguments, but may throw any exception. This is an 
+			alternative to implementing Spring's DisposableBean interface or the standard 
+			Java Closeable/AutoCloseable interface, or marking a method with the PreDestroy 
+			annotation. Note: Only invoked on beans whose lifecycle is under the full 
+			control of the factory - which is always the case for singletons, but not 
+			guaranteed for any other scope. -->
+	
+			<!-- lazy-init 속성 : true로 하면 미리 생성하지 않고 클라이언트가 요청하는 시점에 생성, 그러므로 메모리 관리 
+			효율적 Indicates whether this bean is to be lazily initialized. -->
+	
+			<!-- scope 속성 : 기본이 싱글톤, 생략됨, 단하나만 생성되어 운용되도록 한다. prototype은 요청될 때마다 새로운 
+			객체 생성 The scope of this bean: typically "singleton" (one shared instance, 
+			which will be returned by all calls to getBean with the given id), or "prototype" 
+			(independent instance resulting from each call to getBean) -->
+			
+			<!-- <bean id="tv" class="SamsungTV" init-method="initMethod" destroy-method="destroyMethod" 
+			scope="singleton"></bean> -->
+	
+			<!-- <bean id="tv" class="polymorphism.SamsungTV" p:speaker-ref="sony" p:price="3000" 
+			scope="singleton"> -->
+	
+			<!-- 생성자를 이용한 의존성 처리 -->
+			<!-- <constructor-arg ref="apple"></constructor-arg> <constructor-arg value="150"></constructor-arg> -->
+	
+			<!-- setter 인젝션 의존성 처리 -->
+	
+			<!-- <property name="speaker" ref="sony"></property> <property name="price" 
+			value="2000"></property> -->
+			<!-- </bean> -->
+	
+	
+			<!-- <bean id="sony" class="polymorphism.SonySpeaker"></bean> -->
+			<!-- <bean id="apple" class="polymorphism.AppleSpeaker"></bean> -->
+	
+	
+			<!-- <bean id="collectionBean" class="injection.CollectionBean"> <property 
+			name="addressList"> -->
+	
+			<!-- <list> <value>모란역</value> <value>모란역</value> <value>강남역</value> <value>역삼역</value> 
+			</list> -->
+	
+			<!--Map 컬렉션을 사용했을 때 -->
+			<!-- <map> <entry> <key> <value>고길동</value> </key> <value>서울시 강남구 역삼동</value> 
+			</entry> <entry> <key> <value>마이콜</value> </key> <value>서울시 강서구 화곡동</value> 
+			</entry> </map> -->
+	
+			<!-- Props elements differ from map elements in that values must be strings. -->
+	
+			<!--Properties 컬렉션을 사용했을 때 -->
+			<!-- <props> <prop key="고길동2">서울시 강남구 역삼동2</prop> <prop key="마이콜2">서울시 강서구 
+			화곡동2</prop> </props> </property> -->
+	
+	
+	
+			<!-- </bean> -->
+	
+	
+	
+			<!-- <bean> 등록하지 않고 자동으로 생성하기 위함, 이 설정을 추가하면 스프링 컨테이너는 클래스 패스에 있는 클래스들을 
+			스캔하여 @Component가 설정된 클래스들을 자동으로 객체 생성 -->
+	
+	
+	
+			<!-- DataSource 설정 : 스프링 JDBC만을 위한 설정은 아니고 후에 테스트할 트랜잭션 처리나 MyBatis 연동, 
+			JPA 연동에서도 중요, 일반적으로 Apache의 BasicDataSource 사용 -->
+			
+			<!--AOP 관련 어노테이션들을 인식하고 용도에 맞게 처리해 줌 -->
+			<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	
             
             <context:property-placeholder location="classpath:config/database.properties" />
             <!-- DataSource 설정 -->
@@ -25,29 +125,50 @@
             </bean>
             
             <!-- Spring JDBC 설정 -->
+            <!--This is the central class in the JDBC core package. It simplifies the 
+			use of JDBC and helps to avoid common errors. It executes core JDBC workflow, 
+			leaving application code to provide SQL and extract results. This class executes 
+			SQL queries or updates, initiating iteration over ResultSets and catching 
+			JDBC exceptions and translating them to the generic, more informative exception 
+			hierarchy defined in the org.springframework.dao package. -->
             <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
             	<property name="dataSource" ref="dataSource" />
             </bean>
             
             <!-- Transaction 설정 -->
+            <!-- 모든 트랜잭션 관리자는 PlatformTransactionManager 인터페이스를 구현한 클래스이다. DataSourceTransactionManager도 
+			다른 트랜잭션 관리자와 마찬가지로 PlatformTransactionManager의 commit, rollback 메소드를 재정의하여 
+			구현하고 있을 뿐이지, PlatformTransactionManager 객체 스스로 자신이 가진 메소드를 실행할 수는 없다. 그렇다면 
+			트랜잭션 관리자가 가지고 있는 메소드를 호출하면서 실질적인 트랜잭션 관리 기능을 제공하는 것은 무었일까? 이 시점에서 어드바이스의 
+			개념을 다시 한 번 떠올려 보기 바란다. 어드바이스느 ㄴ비지니스 메소드 실행 전이나 후에 동작하여 비지니스 메소드와 무관하게 공통기능을 
+			제공한다. 이 공통 기능 중에서 가장 대표적인 것이 예외 처리와 트랜잭션 처리다. 비지니스 메소드가 실행되다가 예외가 발생하면 해당 
+			메소드에 대한 트랜잭션을 롤백하고 문제없이 정상으로 수행 종료되면 트랜잭션을 커밋하면 된다. 트랜잭션을 커밋 롤백하기 위핸 객체는 
+			DataTransactionManager로 등록했다. 이 트랜잭션 관리자를 이용하여 트랜잭션을 제어하는 어드바이스를 등록하면 됨 -->
             <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-            	<property name="dataSource" ref="dataSource"></property>
-            </bean>
-            
-            <tx:advice id="txAdvice" transaction-manager="txManager">
-            	<tx:attributes>
-            		<tx:method name="get*" read-only="true"/>
-            		<tx:method name="*"/>
-            	</tx:attributes>
-            </tx:advice>
-            
-            <aop:config>
-            	<aop:pointcut expression="execution(* com.springbook.biz..*(..))" id="txPointcut"/>
-            	<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
-            </aop:config>
-            
-            <!-- 
-            <bean id="log" class="com.springbook.biz.common.Log4jAdvice"></bean>
+				<property name="dataSource" ref="dataSource"></property>
+			</bean>
+		
+		
+			<!-- get으로 시작하는 모든 메소드는 읽기 전용으로 처리되어 트랜잭션 관리대상에서 제외하고 나머지 메소드들은 트랜잭션 관리에 
+				포함 -->
+			<tx:advice id="txAdvice" transaction-manager="txManager">
+				<tx:attributes>
+					<tx:method name="get*" read-only="true" />
+					<tx:method name="*" />
+				</tx:attributes>
+			</tx:advice>
+
+			<aop:config>
+				<aop:pointcut id="txPointcut"  expression="execution(* com.springbook.biz..*(..))"/>		
+				<aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice"/>
+			</aop:config>
+		
+			<context:component-scan base-package="com.springbook.biz" />
+		            
+             
+             
+            <!-- AOP -->
+            <!-- <bean id="log" class="com.springbook.biz.common.Log4jAdvice"></bean>
             
             <aop:config>
             	<aop:pointcut expression="execution(* com.springbook.biz..*Impl.*(..))" id="allPointcut"/>
@@ -55,141 +176,38 @@
             	<aop:aspect ref="log">
             		<aop:after method="printLogging" pointcut-ref="getPointcut"/>
             	</aop:aspect>
-            </aop:config>
-             -->
-            <!-- 
-            <bean id="before" class="com.springbook.biz.common.BeforeAdvice"></bean>
+            </aop:config> -->
+
             
-            <aop:config>
-            	<aop:pointcut expression="execution(* com.springbook.biz..*Impl.*(..))" id="allPointcut"/>
-            	<aop:aspect ref="before">
-            		<aop:before method="beforeLog" pointcut-ref="allPointcut"/>
-            	</aop:aspect>
-            </aop:config>
-             -->
-			<!-- 
-            <bean id="afterReturning" class="com.springbook.biz.common.AfterReturningAdvice"></bean>
-            
-            <aop:config>
-            	<aop:pointcut expression="execution(* com.springbook.biz..*Impl.get*(..))" id="getPointcut"/>
-            	<aop:aspect ref="afterReturning">
-            		<aop:after-returning method="afterLog" pointcut-ref="getPointcut" returning="returnObj" />
-            	</aop:aspect>
-            </aop:config> 
-			 -->
-  			<!--  
-            <bean id="afterThrowing" class="com.springbook.biz.common.AfterThrowingAdvice"></bean>
-            <bean id="after" class="com.springbook.biz.common.AfterAdvice"></bean>
-            
-            <aop:config>
-            	<aop:pointcut expression="execution(* com.springbook.biz..*Impl.*(..))" id="allPointcut"/>
-            	<aop:aspect ref="afterThrowing">
-            		<aop:after-throwing method="exceptionLog" pointcut-ref="allPointcut" throwing="exceptObj"/>
-            	</aop:aspect>
-            	
-            	<aop:aspect ref="after">
-            		<aop:after method="finallyLog" pointcut-ref="allPointcut" />
-            	</aop:aspect>
-            </aop:config> 
-             -->
-            <!--  
-            <bean id="around" class="com.springbook.biz.common.AroundAdvice"></bean>
-            
-            <aop:config>
-            	<aop:pointcut expression="execution(* com.springbook.biz..*Imple.*(..))" id="allPointcut"/>
-            	<aop:aspect ref="around">
-            		<aop:around method="aroundLog" pointcut-ref="allPointcut" />
-            	</aop:aspect>                    
-            </aop:config>
- 			     -->       
-              
-              
-              
-              
-              
-           <!--  
-            <bean id="userService" class="com.springbook.biz.user.impl.UserServiceImpl">
-            	<property name="userDAO" ref="userDAO" />
-            </bean>
+            <!-- <bean id="userService" class="com.springbook.biz.user.impl.UserServiceImpl"> 
+			<property name="userDAO" ref="userDAO" /> </bean> <bean id="userDAO" class="com.springbook.biz.user.impl.UserDAO" /> -->
+			<!-- <bean id="boardService" class="com.springbook.biz.board.impl.BoardServiceImpl"> 
+			<property name="boardDAO" ref="boardDAO" /> </bean>  -->
+			<!-- <bean id="boardDAO" class="com.springbook.biz.board.impl.BoardDAO" /> -->
 
-			<bean id="userDAO" class="com.springbook.biz.user.impl.UserDAO" />
-			 -->
-			
-	<!-- <bean> 등록하지 않고 자동으로 생성하기 위함. -->
-	<!-- <context:component-scan base-package="polymorphism" /> -->
 
-<!-- List 타입 매핑 -->
-	<!-- <bean id="collectionBean"
-		class="com.springbook.ioc.injection.CollectionBean">
-		<property name="addressList">
-			<list>
-				<value>서울시 강남구 역삼동</value>
-				<value>서울시 성동구 행당동</value>
-			</list>
-		</property>
-	</bean> -->
 
-<!-- Set 타입 매핑 -->
-	<!-- <bean id="collectionBean"
-		class="com.springbook.ioc.injection.CollectionBean">
-		<property name="addressList">
-			<set value-type="java.lang.String">
-				<value>서울시 강남구 역삼동</value>
-				<value>서울시 성동구 성수동</value>
-				<value>서울시 성동구 성수동</value>
-			</set>
-		</property>
-	</bean> -->
+			<!-- <bean id="log" class="com.springbook.biz.common.LogAdvide"></bean>
+		
+			<aop:config>
+				
+			어드바이스를 적용할 위치 선정하는 설정, 어드바이스(보조기능)는 포인트 컷으로 적용될 위치가 결정되고, 그 시점에 어드바이스가 
+				실행된다. 포인트 컷은 포인트 컷 표현식을 사용하여 설정할 수 있으며, 특정 어노테이션을 지정하여 설정할 수도 있다.
+			* com.springbook.biz..*Impl.*(..))
+			리턴타입 패키지 경로 ..클래스명.메소드명 및 매개변수
 	
-<!-- Map 타입 매핑 -->
-	<!-- <bean id="collectionBean"
-		class="com.springbook.ioc.injection.CollectionBean">
-		<property name="addressList">
-			<map>
-				<entry>
-					<key><value>고길동</value></key>
-					<value>서울시 강남구 역삼동</value>
-				</entry>
-				<entry>
-					<key><value>마이콜</value></key>
-					<value>서울시 강서구 화곡동</value>
-				</entry>
-			</map>
-		</property>
-	</bean> -->
+			<aop:pointcut expression="execution(* com.springbook.biz..*Impl.*(..))" id="allPointCut" />
+			<aop:pointcut expression="execution(* com.springbook.biz..*Impl.get*(..))" id="getPointCut" />
+			<aop:aspect ref="log">
+			<aop:around pointcut-ref="allPointCut" method="printLog" />
+			</aop:aspect>
 
-<!-- Properties 타입 매핑 -->
-	<!-- <bean id="collectionBean"
-		class="com.springbook.ioc.injection.CollectionBean">
-		<property name="addressList">
-			<props>
-				<prop key="고길동">서울시 강남구 역삼동</prop>
-				<prop key="마이콜">서울시 강서구 화곡동</prop>
-			</props>
-		</property>
-	</bean> -->
 
-	<!-- <bean id="tv" class="polymorphism.LgTV"></bean> -->
-	
-<!-- 	<bean id="sony" class="polymorphism.SonySpeaker"></bean> -->
-	
-<!-- 	<bean id="apple" class="polymorphism.AppleSpeaker"></bean> -->
-<!-- 	<bean id="tv" class="polymorphism.SamsungTV"></bean> -->
-	
-<!-- <bean id="tv" class="polymorphism.SamsungTV" init-method="initMethod" destroy-method="destroyMethod" lazy-init="true" scope="singleton"> -->
-<!-- <bean id="tv" class="polymorphism.SamsungTV"
-	p:speaker-ref="sony" p:price="2700000" /> -->
 
-<!-- 	<property name="speaker" ref="apple"></property>
-	<property name="price" value="2700000"></property> -->
+			aop:advisor 엘리먼트는 포인트것과 어드바이스를 결합한다는 점에서는 애스펙트와 같은 기능을 한다. 하지만 트랜잭션 
+			설정 같은 몇몇 특수한 경우는 애스펙트가 아닌 어드바이저를 사용해야 한다. 왜냐하면 어드바이스 객체의 메소드 이름을 확인할 수 없을 
+			때
 
-<!-- <constructor-arg ref="sony"></constructor-arg> -->
-<!-- <constructor-arg ref="apple"></constructor-arg> -->
-<!-- <constructor-arg value="2700000"></constructor-arg> -->
-<!-- <bean id="sony" class="polymorphism.SonySpeaker"></bean> -->
-<!-- <bean id="apple" class="polymorphism.AppleSpeaker"></bean> -->
-
-	<!-- <context:component-scan base-package="polymorphism" />
-	<bean class="polymorphism.SonySpeaker"></bean> -->
+			</aop:config> -->
 
 </beans>

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.springbook.biz.board.BoardVO;
 
 @Repository
-public class BoardDAOSpring /* extends JdbcDaoSupport */ {
+public class BoardDAOSpring extends JdbcDaoSupport  {
 
 	//SQL 명령어들
 //	private final String BOARD_INSERT = "insert into board(seq, title, writer, content) values((select nvl(max(seq), 0)+1 from board),?,?,?)";
@@ -25,10 +25,11 @@ public class BoardDAOSpring /* extends JdbcDaoSupport */ {
 	private final String BOARD_GET = "select * from board where seq=?";
 	private final String BOARD_LIST = "select * from board order by seq desc";
 	
-//	@Autowired
-//	public void setSuperDataSource(DataSource dataSource) {
-//		super.setDataSource(dataSource);
-//	}
+	//getJdbcTemplate() 메소드가 JbcTemplate 객체를 리턴하려면 데이터소스 객체가 있어야 하므로 JdbcDaoSupport의 부모 메소드 호출하여 데이터 소스 객체로 의존성 주입
+	@Autowired	 //주로 변수위에 선언하였는데 메서드 위해 선언해도 동작한다. 메소드 위에 붙이면 해당 메소드를 스프링 컨테이너가 자동으로 호출, 이 때 매소드 매개변수 타입(데이터소스)을 확인하고 해당 타입의 객체가 메모리에 존재하면 그 객체를 인자로 넘겨준다. 
+	public void setSuperDataSource(DataSource dataSource) {
+		super.setDataSource(dataSource);
+	}
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -37,6 +38,7 @@ public class BoardDAOSpring /* extends JdbcDaoSupport */ {
 	// 글 등록
 	public void insertBoard(BoardVO vo) {
 		System.out.println("===> Spring JDBC로 insertBoard() 기능 처리");
+		//Return the JdbcTemplate for this DAO,pre-initialized with the DataSource or set explicitly.
 //		getJdbcTemplate().update(BOARD_INSERT, vo.getTitle(), vo.getWriter(), vo.getContent());
 //		jdbcTemplate.update(BOARD_INSERT, vo.getTitle(), vo.getWriter(), vo.getContent());
 		jdbcTemplate.update(BOARD_INSERT, vo.getSeq(), vo.getTitle(), vo.getWriter(), vo.getContent());

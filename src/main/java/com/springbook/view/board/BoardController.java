@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +30,15 @@ public class BoardController {
 	//@ModelAttribute는 객체의 이름의 변경할 목적으로도 사용하지만 View(JSP)에서 사용할 데이터를 설정하는 용도로도 사용할 수 있다.
 	//@ModelAttribute가 설정된 메서드는 @RequestMapping 어노테이션이 적용된 메소드보다 먼저 호출
 	//@ModelAttribute 메소드 실행결과로 리턴된 객체는 자동으로 Model에 저장된다. 따라서 @ModelAttribute 메소드 실행결과로 리턴된 객체를 View 페이지에서 사용할 수 있다.
-		
+	
+	@RequestMapping(value = "/dataTransform.do")
+	@ResponseBody
+	public List<BoardVO> dataTransform(BoardVO vo) {
+		vo.setSearchCondition("TITLE");
+		vo.setSearchKeyword("");
+		List<BoardVO> boardList = boardService.getBoardList(vo);
+		return boardList;
+	}
 	
 	// 검색 조건 목록 설정
 	@ModelAttribute("conditionMap")

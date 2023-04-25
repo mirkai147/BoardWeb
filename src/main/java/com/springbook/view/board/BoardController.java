@@ -123,6 +123,15 @@ public class BoardController {
 //		List<BoardVO> boardList = boardDAO.getBoardList(vo);
 //		model.addAttribute("boardList", boardList);	// Model 정보 저장
 		
+		// Null Check
+		if(vo.getSearchCondition() == null) {
+			vo.setSearchCondition("TITLE");
+		}
+		if(vo.getSearchKeyword() == null) {
+			vo.setSearchKeyword("");
+		}
+		
+		
 		List<BoardVO> boardList = boardService.getBoardList(vo);
 		model.addAttribute("boardList", boardList);
 		

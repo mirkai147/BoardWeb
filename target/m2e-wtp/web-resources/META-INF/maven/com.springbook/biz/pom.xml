@@ -41,6 +41,20 @@
 			<artifactId>h2</artifactId>
 			<version>1.4.200</version>
 		</dependency>
+		
+		<!-- Mybatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.3.1</version>
+		</dependency>
+		
+		<!-- Mybatis Spring -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>1.2.4</version>
+		</dependency>
 	
 		<!-- JDBC -->
 		<!-- Spring JDBC provides an abstraction layer that simplifies code to use JDBC and the parsing of database-vendor specific error codes. -->

@@ -101,7 +101,7 @@
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
-			<version>${org.aspectj-version}</version>
+			<version>1.8.8</version>
 		</dependency>	
 		
 		<!-- weaving : 조인포인트(어드바이스가 적용될 위치)에 실행할 코드인 어드바이스를 끼워넣는 과정 -->
